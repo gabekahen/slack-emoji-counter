@@ -33,7 +33,7 @@ func GroupReactionEmoji(api *slack.Client, params slack.HistoryParameters) []str
 // for reactions within visible private groups.
 func ChannelReactionEmoji(api *slack.Client, params slack.HistoryParameters) []string {
   var reactions []string
-  channels, err := api.GetChannels(false)
+  channels, err := api.GetChannels(true)
 
 	if err != nil {
 		log.Fatal(err)
