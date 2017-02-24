@@ -11,6 +11,6 @@ func main() {
   api := slack.New(TOKEN)
   params := slack.HistoryParameters {"", "0", 100, false, false}
 
-  foo := ReactionEmoji(api, params)
+  foo := ChannelReactionEmoji(api, params)
   fmt.Println(foo)
 }

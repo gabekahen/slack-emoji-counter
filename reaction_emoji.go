@@ -6,15 +6,16 @@ import (
   "log"
 )
 
-func ReactionEmoji(api *slack.Client, params slack.HistoryParameters) []string {
-	channels, err := api.GetChannels(false)
-  groups, err := api.GetGroups(true)
-
+// Return a string slice containing all individual emoji used
+// for reactions within all public channels.
+func GroupReactionEmoji(api *slack.Client, params slack.HistoryParameters) []string {
   var reactions []string
+  groups, err := api.GetGroups(true)
 
 	if err != nil {
 		log.Fatal(err)
 	}
+
   for _, group := range groups {
     fmt.Println(group.Name)
     history, err := api.GetGroupHistory(group.ID, params)
@@ -29,6 +30,18 @@ func ReactionEmoji(api *slack.Client, params slack.HistoryParameters) []string {
       }
     }
   }
+  return reactions
+}
+
+// Return a string slice containing all individual emoji used
+// for reactions within visible private groups.
+func ChannelReactionEmoji(api *slack.Client, params slack.HistoryParameters) []string {
+  var reactions []string
+  channels, err := api.GetChannels(false)
+
+	if err != nil {
+		log.Fatal(err)
+	}
 	for _, channel := range channels {
     if ! channel.IsArchived {
       fmt.Println(channel.Name)
