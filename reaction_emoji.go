@@ -23,11 +23,7 @@ func GroupReactionEmoji(api *slack.Client, params slack.HistoryParameters) []str
       fmt.Printf("%s\n", err)
     }
     for _, message := range history.Messages {
-      if len(message.Reactions) != 0 {
-        for _, reaction := range message.Reactions {
-          reactions = append(reactions, reaction.Name)
-        }
-      }
+      parseMessages(message, &reactions)
     }
   }
   return reactions
@@ -50,13 +46,18 @@ func ChannelReactionEmoji(api *slack.Client, params slack.HistoryParameters) []s
     		log.Fatal(err)
     	}
       for _, message := range history.Messages {
-        if len(message.Reactions) != 0 {
-          for _, reaction := range message.Reactions {
-            reactions = append(reactions, reaction.Name)
-          }
-        }
+        parseMessages(message, &reactions)
       }
     }
   }
   return reactions
+}
+
+// Parse reactions from Messages, and push into slice.
+func parseMessages(message slack.Message, reactions *[]string) {
+  if len(message.Reactions) != 0 {
+    for _, reaction := range message.Reactions {
+      *reactions = append(*reactions, reaction.Name)
+    }
+  }
 }
