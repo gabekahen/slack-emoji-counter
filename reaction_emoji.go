@@ -39,15 +39,13 @@ func ChannelReactionEmoji(api *slack.Client, params slack.HistoryParameters) []s
 		log.Fatal(err)
 	}
 	for _, channel := range channels {
-    if ! channel.IsArchived {
-      fmt.Println(channel.Name)
-      history, err := api.GetChannelHistory(channel.ID, params)
-      if err != nil {
-    		log.Fatal(err)
-    	}
-      for _, message := range history.Messages {
-        parseMessages(message, &reactions)
-      }
+    fmt.Println(channel.Name)
+    history, err := api.GetChannelHistory(channel.ID, params)
+    if err != nil {
+  		log.Fatal(err)
+  	}
+    for _, message := range history.Messages {
+      parseMessages(message, &reactions)
     }
   }
   return reactions
