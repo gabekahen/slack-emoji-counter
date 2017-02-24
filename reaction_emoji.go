@@ -3,23 +3,17 @@ package main
 import (
   "fmt"
   "github.com/nlopes/slack"
-  "sort"
-  "os"
+  "log"
 )
 
-func main() {
-  var TOKEN string = os.Getenv("SLACK_TOKEN")
-  api := slack.New(TOKEN)
-  params := slack.HistoryParameters {"", "0", 100, false, false}
-
+func ReactionEmoji(api *slack.Client, params slack.HistoryParameters) []string {
 	channels, err := api.GetChannels(false)
   groups, err := api.GetGroups(true)
 
   var reactions []string
 
 	if err != nil {
-		fmt.Printf("%s\n", err)
-		return
+		log.Fatal(err)
 	}
   for _, group := range groups {
     fmt.Println(group.Name)
@@ -40,8 +34,7 @@ func main() {
       fmt.Println(channel.Name)
       history, err := api.GetChannelHistory(channel.ID, params)
       if err != nil {
-    		fmt.Printf("%s\n", err)
-    		return
+    		log.Fatal(err)
     	}
       for _, message := range history.Messages {
         if len(message.Reactions) != 0 {
@@ -52,6 +45,5 @@ func main() {
       }
     }
   }
-  sort.Strings(reactions)
-  fmt.Println(reactions)
+  return reactions
 }

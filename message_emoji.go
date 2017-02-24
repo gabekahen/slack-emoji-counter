@@ -53,6 +53,5 @@ func main() {
       }
     }
   }
-  sort.Strings(reactions)
-  fmt.Println(reactions)
+  return reactions
 }
