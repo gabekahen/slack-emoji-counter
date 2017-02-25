@@ -4,6 +4,7 @@ import (
   "fmt"
   "github.com/nlopes/slack"
   "os"
+  "log"
 )
 
 func main() {
@@ -11,6 +12,9 @@ func main() {
   api := slack.New(TOKEN)
   params := slack.HistoryParameters {"", "0", 100, false, false}
 
-  foo := ChannelReactionEmoji(api, params)
-  fmt.Println(foo)
+  emojilist, err := api.GetEmoji()
+
+  // TODO compile a regular expression from emojilist, and run through
+  // regexp.FindAllString.
+  fmt.Println(ChannelMessageEmoji(api, params, emojilist)
 }
