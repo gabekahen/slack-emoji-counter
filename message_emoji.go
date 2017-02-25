@@ -3,11 +3,34 @@ package main
 import (
   "fmt"
   "github.com/nlopes/slack"
-  "sort"
-  "os"
-  "regexp"
+  "log"
 )
 
+// Produce slice of all emoji from messages within HistoryParameters
+// on all public channels.
+func ChannelMessageEmoji(api *slack.Client, params slack.HistoryParameters) []string {
+  var reactions []string
+  channels, err := api.GetChannels(true)
+
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  for _, channel := range channels {
+    fmt.Println(channel.Name)
+    history, err := api.GetChannelHistory(channel.ID, params)
+
+    if err != nil {
+      log.Fatal(err)
+    }
+
+    for _, message := range history.Messages {
+      fmt.Println(message.Text)
+    }
+  }
+  return reactions
+}
+/*
 func main() {
   var TOKEN string = os.Getenv("SLACK_TOKEN")
   api := slack.New(TOKEN)
@@ -55,3 +78,4 @@ func main() {
   }
   return reactions
 }
+*/
